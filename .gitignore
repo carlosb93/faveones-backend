@@ -1,0 +1,39 @@
+#env
+.env
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+lib-cov
+
+# Directorio de covertura utilizado por herramientas como Istambul
+coverage
+
+# prueba de covertura nyc
+.nyc_output
+
+# Almacenamiento intermedio de Grunt (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# binarios de addons compilados (http://nodejs.org/api/addons.html)
+build/Release
+
+# Directorios de dependencias
+node_modules
+jspm_packages
+typings
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history

@@ -1,0 +1,31 @@
+{
+    "name": "faveones-backend",
+    "version": "1.0.0",
+    "description": "Node.js + MySQL API For User management, Authentication & Register, And more stuff for Social media APP",
+    "scripts": {
+        "start": "node ./server.js",
+        "start:dev": "nodemon ./server.js"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-fileupload": "^1.2.0",
+        "express-jwt": "^6.0.0",
+        "express-validator": "^6.6.1",
+        "handlebars": "^4.7.6",
+        "joi": "^17.2.0",
+        "jsonwebtoken": "^8.5.1",
+        "jw-paginate": "^1.0.4",
+        "lodash": "^4.17.20",
+        "mysql2": "^2.1.0",
+        "nodemailer": "^6.4.13",
+        "rootpath": "^0.1.2",
+        "sequelize": "^6.3.4"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4"
+    }
+}
