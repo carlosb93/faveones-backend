@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    back:
+        image: node:12-alpine
+        networks:
+            - favenet
+        volumes:
+            - ./:/var/www
+        ports:
+            - 3111:80
+        working_dir: /var/www
+        environment: 
+            APP_ENV: prod
+        command: npm start
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: root123faveones
+            MYSQL_DATABASE: FaveOnesDb
+            MYSQL_USER: secret
+            MYSQL_PASSWORD: secretfaveones123
+        networks:
+            - favenet
+        volumes:
+            - ./containers/db/volume:/var/lib/mysql
+        ports:
+            - 33060:3306
+
+networks:
+    favenet:
+        driver: bridge

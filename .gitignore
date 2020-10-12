@@ -37,3 +37,7 @@ typings
 
 # Optional REPL history
 .node_repl_history
+
+# volumes and stuff
+/containers/db/volume
+desktop.ini
