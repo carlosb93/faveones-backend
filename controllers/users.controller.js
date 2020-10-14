@@ -15,7 +15,7 @@ exports.authenticateSchema = async (req, res,next) =>  {
 }
 
 exports.authenticate = async (req, res,next) =>  {
-    userService.authenticate(req.body)
+    userService.authenticate(req.body,res)
         .then(user => res.json(user))
         .catch(next);
 }

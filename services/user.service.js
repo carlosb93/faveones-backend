@@ -25,11 +25,14 @@ module.exports = {
     delete: _delete
 };
 
-async function authenticate({ email, password }) {
+async function authenticate({ email, password }, res) {
     const user = await db.User.scope('withHash').findOne({ where: { email } });
 
-    if (!user || !(await bcrypt.compare(password, user.password)))
-        throw 'Incorrect username or password';
+    if (!user || !(await bcrypt.compare(password, user.password))){
+        return res.status(200).json({message: 'Incorrect username or password'});
+        // throw 'Incorrect username or password';
+    }
+        
 
     // Autenticado correctamente
     const token = jwt.sign({ sub: user.id }, process.env.SECRET, { expiresIn: '7d' }); // tiempo de validez 7 dias
@@ -47,11 +50,13 @@ async function getById(id) {
 async function create(params) {
     // Validacion
     if (await db.User.findOne({ where: { username: params.username } })) {
-        throw 'User name: "' + params.username + '" is already in use';
+        // throw 'User name: "' + params.username + '" is already in use';
+        return res.status(200).json({message: 'User name: "' + params.username + '" is already in use'});
     }
 
     if (await db.User.findOne({ where: { email: params.email } })) {
-        throw 'Email: "' + params.email + '" is already in use';
+        // throw 'Email: "' + params.email + '" is already in use';
+        return res.status(200).json({message: 'Email: "' + params.email + '" is already in use'});
     }
 
     // Hash password
@@ -120,7 +125,9 @@ async function update(id, params) {
     // Validando
     const usernameChanged = params.username && user.username !== params.username;
     if (usernameChanged && await db.User.findOne({ where: { username: params.username } })) {
-        throw 'User name: "' + params.username + '" is already in use';
+        // throw 'User name: "' + params.username + '" is already in use';
+        return res.status(200).json({message: 'User name: "' + params.username + '" is already in use'});
+        
     }
 
     // Hash password si fue especificada
