@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-    back:
-        image: node:12-alpine
-        networks:
-            - favenet
-        volumes:
-            - ./:/var/www
-        ports:
-            - 3111:80
-        working_dir: /var/www
-        environment: 
-            APP_ENV: prod
-        command: npm start
     db:
         image: mysql:5.7
         environment:
