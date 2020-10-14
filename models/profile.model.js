@@ -5,13 +5,13 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
-        name: { type: DataTypes.STRING, allowNull: false },
-        lastname: { type: DataTypes.STRING, allowNull: false },
-        nick: { type: DataTypes.STRING, allowNull: false },
-        email: { type: DataTypes.STRING, allowNull: false },
+        name: { type: DataTypes.STRING, allowNull: true },
+        lastname: { type: DataTypes.STRING, allowNull: true },
+        nick: { type: DataTypes.STRING, allowNull: true },
+        email: { type: DataTypes.STRING, allowNull: true },
         avatar: { type: DataTypes.JSON, allowNull: true },
-        address: { type: DataTypes.STRING, allowNull: false },
-        description: { type: DataTypes.STRING, allowNull: false },
+        address: { type: DataTypes.STRING, allowNull: true },
+        description: { type: DataTypes.STRING, allowNull: true },
         gender: { type: DataTypes.STRING, allowNull: false },
         zodiac_id: { type: DataTypes.INTEGER,
             allowNull: false,
