@@ -9,7 +9,7 @@ function model(sequelize) {
         lastname: { type: DataTypes.STRING, allowNull: false },
         nick: { type: DataTypes.STRING, allowNull: false },
         email: { type: DataTypes.STRING, allowNull: false },
-        avatar: { type: DataTypes.JSON, allowNull: false },
+        avatar: { type: DataTypes.JSON, allowNull: true },
         address: { type: DataTypes.STRING, allowNull: false },
         description: { type: DataTypes.STRING, allowNull: false },
         gender: { type: DataTypes.STRING, allowNull: false },
