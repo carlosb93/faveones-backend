@@ -87,6 +87,7 @@ async function create(params,res) {
                 lastname: user.lastName,
                 nick: user.username,
                 email: user.email,
+                birthday: '1993-05-08',
                 // avatar: '',
                 // address: '',
                 // description: '',
@@ -122,19 +123,10 @@ async function verifyUser(id) {
 async function update(id, params, res) {
     const user = await getUser(id);
 
-    // Validando
-    const usernameChanged = params.username && user.username !== params.username;
-    if (usernameChanged && await db.User.findOne({ where: { username: params.username } })) {
-        // throw 'User name: "' + params.username + '" is already in use';
-        return res.status(200).json({message: 'User name: "' + params.username + '" is already in use'});
-        
-    }
-
     // Hash password si fue especificada
     if (params.password) {
         params.password = await bcrypt.password(params.password, 10);
     }
-
     // Actualizar parametros y guardar
     Object.assign(user, params);
     await user.save();
