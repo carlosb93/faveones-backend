@@ -15,8 +15,6 @@ async function initialize() {
     const password = process.env.DB_PASSWORD;
     const database = process.env.DB_DATABASE;
 
-    // console.log('the connection parameters =>', host, port, user, password)
-
     const connection = await mysql.createConnection({ host, port, user, password });
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
@@ -51,56 +49,59 @@ async function initialize() {
     
 
     db.Zodiac.sync().then(() => {
-        db.zodiac.destroy({truncate:true, cascade:false});
+        const zodiac = await db.Zodiac.findOne({where:{ id: 1}});
+        if (!zodiac) {
+            db.Zodiac.create({
+                name: 'Aries',
+                description: '21 of March - 19 of April'
+            });
+            db.Zodiac.create({
+                name: 'Tauro',
+                description: '20 of April - 21 of Mayo'
+            });
+            db.Zodiac.create({
+                name: 'Geminis',
+                description: '21 of Mayo - 20 of June'
+            });
+            db.Zodiac.create({
+                name: 'Cancer',
+                description: '21 of June - 22 of July'
+            });
+            db.Zodiac.create({
+                name: 'Leo',
+                description: '23 of July - 22 of August'
+            });
+            db.Zodiac.create({
+                name: 'Virgo',
+                description: '23 of August - 22 of Septemer'
+            });
+            db.Zodiac.create({
+                name: 'Libra',
+                description: '23 of Septemer - 22 of October'
+            });
+            db.Zodiac.create({
+                name: 'Escorpio',
+                description: '22 of October - 21 of November'
+            });
+            db.Zodiac.create({
+                name: 'Sagitario',
+                description: '22 of November - 21 of December'
+            });
+            db.Zodiac.create({
+                name: 'Capricornio',
+                description: '22 of December - 19 of January'
+            });
+            db.Zodiac.create({
+                name: 'Acuario',
+                description: '20 of January - 18 of February'
+            });
+            db.Zodiac.create({
+                name: 'Piscis',
+                description: '19 of February - 20 of March'
+            });
+        } 
         
-        db.Zodiac.create({
-            name: 'Aries',
-            description: '21 of March - 19 of April'
-        });
-        db.Zodiac.create({
-            name: 'Tauro',
-            description: '20 of April - 21 of Mayo'
-        });
-        db.Zodiac.create({
-            name: 'Geminis',
-            description: '21 of Mayo - 20 of June'
-        });
-        db.Zodiac.create({
-            name: 'Cancer',
-            description: '21 of June - 22 of July'
-        });
-        db.Zodiac.create({
-            name: 'Leo',
-            description: '23 of July - 22 of August'
-        });
-        db.Zodiac.create({
-            name: 'Virgo',
-            description: '23 of August - 22 of Septemer'
-        });
-        db.Zodiac.create({
-            name: 'Libra',
-            description: '23 of Septemer - 22 of October'
-        });
-        db.Zodiac.create({
-            name: 'Escorpio',
-            description: '22 of October - 21 of November'
-        });
-        db.Zodiac.create({
-            name: 'Sagitario',
-            description: '22 of November - 21 of December'
-        });
-        db.Zodiac.create({
-            name: 'Capricornio',
-            description: '22 of December - 19 of January'
-        });
-        db.Zodiac.create({
-            name: 'Acuario',
-            description: '20 of January - 18 of February'
-        });
-        db.Zodiac.create({
-            name: 'Piscis',
-            description: '19 of February - 20 of March'
-        });
+        
     });
     // Sincronizando los modelos con la BD
 
