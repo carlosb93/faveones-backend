@@ -49,7 +49,7 @@ async function initialize() {
     
 
     db.Zodiac.sync().then(() => {
-        const zodiac = await db.Zodiac.findOne({where:{ id: 1}});
+        const zodiac = db.Zodiac.findOne({where:{ id: 1}});
         if (!zodiac) {
             db.Zodiac.create({
                 name: 'Aries',
