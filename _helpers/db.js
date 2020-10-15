@@ -48,8 +48,11 @@ async function initialize() {
     db.Post.hasMany(db.Comment,{foreignKey: 'post_id', as: 'comments'});
     db.User.hasMany(db.Profile,{foreignKey: 'user_id', as: 'profile'});
     db.Zodiac.hasMany(db.Profile,{foreignKey: 'zodiac_id', as: 'profile'});
+    
 
     db.Zodiac.sync().then(() => {
+        db.zodiac.destroy({truncate:true, cascade:false});
+        
         db.Zodiac.create({
             name: 'Aries',
             description: '21 of March - 19 of April'

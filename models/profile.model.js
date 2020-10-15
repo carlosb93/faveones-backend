@@ -13,6 +13,7 @@ function model(sequelize) {
         address: { type: DataTypes.STRING, allowNull: true },
         description: { type: DataTypes.STRING, allowNull: true },
         gender: { type: DataTypes.STRING, allowNull: false },
+        birthday: { type: DataTypes.STRING, allowNull: true },
         zodiac_id: { type: DataTypes.INTEGER,
             allowNull: false,
             references:{
