@@ -47,7 +47,7 @@ async function getById(id) {
     return await getUser(id);
 }
 
-async function create(params) {
+async function create(params,res) {
     // Validacion
     if (await db.User.findOne({ where: { username: params.username } })) {
         // throw 'User name: "' + params.username + '" is already in use';
@@ -119,7 +119,7 @@ async function verifyUser(id) {
     return omitHash(user.get());
 }
 
-async function update(id, params) {
+async function update(id, params, res) {
     const user = await getUser(id);
 
     // Validando
