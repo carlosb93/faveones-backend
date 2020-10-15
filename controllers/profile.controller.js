@@ -12,7 +12,7 @@ exports.get = async (req, res,next) =>  {
 }
 
 exports.update = async (req, res,next) =>  {
-    profileService.update(req.body)
+    profileService.update(req)
         .then(user => res.json(user))
         .catch(next);
 }
