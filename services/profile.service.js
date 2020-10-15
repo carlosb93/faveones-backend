@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 module.exports = {
     get,
-    update,
+    update
 };
 
 async function get(req) {
@@ -23,6 +23,9 @@ async function update(req) {
     const profile = await getProfile(req.user.id);
     const user = await getUser(req.user.id);
     params = req.body;
+
+    console.log(req.body);
+
     if(!req.files) {
         
     }else{
@@ -44,8 +47,8 @@ async function update(req) {
         });
 
         
+        params.avatar = JSON.stringify(data);
     }
-    params.avatar = JSON.stringify(data);
 
     // Validando
     const nickChanged = params.nick && profile.nick !== params.nick;
@@ -61,15 +64,19 @@ async function update(req) {
     // Actualizar parametros y guardar
     Object.assign(profile, params);
     await profile.save();
+    console.log(profile.get());
+    
 
-    return post;
+    profile_updated = await getProfile(req.user.id);
+
+    return profile;
 }
 
 
 // Funciones de ayuda
 
 async function getProfile(id) {
-    const profile = await db.Post.findOne({where:{ user_id: id}, include: ['user','zodiac']});
+    const profile = await db.Profile.findOne({where:{ user_id: id}, include: ['user','zodiac']});
     if (!profile) throw 'Profile not found';
     return profile;
 }

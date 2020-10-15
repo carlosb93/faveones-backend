@@ -13,6 +13,6 @@ exports.get = async (req, res,next) =>  {
 
 exports.update = async (req, res,next) =>  {
     profileService.update(req)
-        .then(user => res.json(user))
+        .then(profile => res.json(profile))
         .catch(next);
 }

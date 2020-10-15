@@ -49,7 +49,7 @@ async function getById(id) {
 
 async function create(params,res) {
     // Validacion
-    if (await db.User.findOne({ where: { username: params.username } })) {
+    if (await db.Profile.findOne({ where: { nick: params.username } })) {
         // throw 'User name: "' + params.username + '" is already in use';
         return res.status(200).json({message: 'User name: "' + params.username + '" is already in use'});
     }
@@ -83,9 +83,9 @@ async function create(params,res) {
 
         await db.Profile.create(
             {
-                name: user.firstName,
-                lastname: user.lastName,
-                nick: user.username,
+                name: params.firstName,
+                lastname: params.lastName,
+                nick: params.username,
                 email: user.email,
                 birthday: '1993-05-08',
                 // avatar: '',

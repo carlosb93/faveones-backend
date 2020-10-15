@@ -49,8 +49,7 @@ async function initialize() {
     
 
     db.Zodiac.sync().then(() => {
-        const zodiac = db.Zodiac.findOne({where:{ id: 1}});
-        if (!zodiac) {
+        
             db.Zodiac.create({
                 name: 'Aries',
                 description: '21 of March - 19 of April'
@@ -99,7 +98,7 @@ async function initialize() {
                 name: 'Piscis',
                 description: '19 of February - 20 of March'
             });
-        } 
+         
         
         
     });
