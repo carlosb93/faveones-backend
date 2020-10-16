@@ -35,6 +35,7 @@ async function initialize() {
     db.Post = require('../models/post.model')(sequelize);
     // relations blongs
     db.Post.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
+    db.Post.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
     //model comments
     db.Comment = require('../models/comment.model')(sequelize);
     // relations blongs

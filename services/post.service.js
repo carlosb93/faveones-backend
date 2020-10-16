@@ -18,10 +18,10 @@ module.exports = {
 
 async function newPost(params,user,req,res) {
    
+    let data = [];
     if(!req.files) {
-        params.image = undefined;
+        params.image = '';
     }else{
-        let data = [];
         _.forEach(_.keysIn(req.files.photos), (key) => {
             let photo = req.files.photos[key];
             
@@ -40,14 +40,14 @@ async function newPost(params,user,req,res) {
     params.image = JSON.stringify(data);
     params.user_id = user.id;
         // Guardando posts
-        await db.Post.create(params);
+    await db.Post.create(params);
 }
 
 async function getAll(id) {
     sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
     today = new Date(new Date().setDate(new Date().getDate()));
     
-    posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, order:[['createdAt','DESC']], include: ['user']});
+    posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, order:[['createdAt','DESC']], include: ['profile']});
     
     const page = parseInt(id) || 1;
 
@@ -69,10 +69,10 @@ async function getAllMine(user,req) {
             [Op.or]: [
             {title:{[Op.like]: '%' + req.query.search + '%'}}, 
             {content:{[Op.like]: '%' + req.query.search + '%'}}
-        ]}, include: ['user']});
+        ]}, include: ['profile']});
     }
     else{
-        posts = await db.Post.findAll({where:{ user_id: user.id,}, order:[['createdAt','DESC']], include: ['user']});
+        posts = await db.Post.findAll({where:{ user_id: user.id,}, order:[['createdAt','DESC']], include: ['profile']});
     }
 
     // if(typeof req.query.page != 'undefined'){
@@ -103,7 +103,7 @@ async function searchPosts(req) {
         posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today },[Op.or]: [
             {title:{[Op.like]: '%' + req.query.search + '%'}}, 
             {content:{[Op.like]: '%' + req.query.search + '%'}}
-        ] }, order:[['createdAt','DESC']], include: ['user']});
+        ] }, order:[['createdAt','DESC']], include: ['profile']});
       }
       if(typeof req.query.page != 'undefined'){
 
@@ -181,7 +181,7 @@ async function _delete(id) {
 // Funciones de ayuda
 
 async function getPost(id) {
-    const post = await db.Post.findByPk({where:{ id:{id}}, include: ['user']});
+    const post = await db.Post.findByPk({where:{ id:{id}}, include: ['profile']});
     if (!post) throw 'Post not found';
     return post;
 }
