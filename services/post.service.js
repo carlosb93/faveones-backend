@@ -17,11 +17,11 @@ module.exports = {
 };
 
 async function newPost(params,user,req,res) {
-   
+    let data = [];
+    
     if(!req.files) {
         params.image = undefined;
     }else{
-        let data = [];
         _.forEach(_.keysIn(req.files.photos), (key) => {
             let photo = req.files.photos[key];
             
