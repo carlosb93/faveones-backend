@@ -17,8 +17,8 @@ module.exports = {
 };
 
 async function newPost(params,user,req,res) {
-   
     let data = [];
+    
     if(!req.files) {
         params.image = '';
     }else{
