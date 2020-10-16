@@ -24,8 +24,6 @@ async function update(req) {
     const user = await getUser(req.user.id);
     params = req.body;
 
-    console.log(req.body);
-
     if(!req.files) {
         
     }else{
@@ -64,10 +62,6 @@ async function update(req) {
     // Actualizar parametros y guardar
     Object.assign(profile, params);
     await profile.save();
-    console.log(profile.get());
-    
-
-    profile_updated = await getProfile(req.user.id);
 
     return profile;
 }

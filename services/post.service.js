@@ -47,7 +47,7 @@ async function getAll(id) {
     sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
     today = new Date(new Date().setDate(new Date().getDate()));
     
-    posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['user']});
+    posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, order:['createdAt','DESC'], include: ['user']});
     
     const page = parseInt(id) || 1;
 
@@ -72,7 +72,7 @@ async function getAllMine(user,req) {
         ]}, include: ['user']});
     }
     else{
-        posts = await db.Post.findAll({where:{ user_id: user.id,}, include: ['user']});
+        posts = await db.Post.findAll({where:{ user_id: user.id,}, order:['createdAt','DESC'], include: ['user']});
     }
 
     // if(typeof req.query.page != 'undefined'){
@@ -103,7 +103,7 @@ async function searchPosts(req) {
         posts = await db.Post.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today },[Op.or]: [
             {title:{[Op.like]: '%' + req.query.search + '%'}}, 
             {content:{[Op.like]: '%' + req.query.search + '%'}}
-        ] }, include: ['user']});
+        ] }, order:['createdAt','DESC'], include: ['user']});
       }
       if(typeof req.query.page != 'undefined'){
 
