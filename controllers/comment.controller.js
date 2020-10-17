@@ -9,6 +9,13 @@ exports.getAll = async (req, res,next) =>  {
         .then(comments => res.json(comments))
         .catch(next);
 }
+
+exports.getAllCommentsFromPost = async (req, res,next) =>  {
+    commentService.getAllCommentsFromPost(req.params.id,req.body)
+        .then(comments => res.json(comments))
+        .catch(next);
+}
+
 exports.getAllMine = async (req, res,next) =>  {
     commentService.getAllMine(req.user,req)
         .then(comments => res.json(comments))

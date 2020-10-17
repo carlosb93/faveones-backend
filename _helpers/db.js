@@ -36,11 +36,13 @@ async function initialize() {
     // relations blongs
     db.Post.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
     db.Post.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
+    
     //model comments
     db.Comment = require('../models/comment.model')(sequelize);
     // relations blongs
     db.Comment.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
     db.Comment.belongsTo(db.Post,{foreignKey: 'post_id', as: 'post'});
+    db.Comment.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
     // relations hasmany
     db.User.hasMany(db.Post,{foreignKey: 'user_id', as: 'posts'});
     db.User.hasMany(db.Comment,{foreignKey: 'user_id', as: 'comments'});

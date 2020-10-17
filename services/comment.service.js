@@ -9,6 +9,7 @@ const _ = require('lodash');
 module.exports = {
     newComment,
     getAll,
+    getAllCommentsFromPost,
     getAllMine,
     searchComments,
     getById,
@@ -29,9 +30,27 @@ async function getAll(id) {
     sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
     today = new Date(new Date().setDate(new Date().getDate()));
     
-    comments = await db.Comment.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['user']});
+    comments = await db.Comment.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['profile']});
     
     const page = parseInt(id) || 1;
+
+    // get pager object for specified page
+    const pager = paginate(comments.length, page);
+
+    // get page of items from items array
+    const pageOfComments = comments.slice(pager.startIndex, pager.endIndex + 1);
+
+    comments = {pager, pageOfComments};
+
+    return comments;
+}
+async function getAllCommentsFromPost(page_id,params) {
+    sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
+    today = new Date(new Date().setDate(new Date().getDate()));
+    
+    comments = await db.Comment.findAll({where:{ post_id: params.post_id, createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['profile']});
+    
+    const page = parseInt(page_id) || 1;
 
     // get pager object for specified page
     const pager = paginate(comments.length, page);
@@ -54,7 +73,7 @@ async function getAllMine(user,req) {
         ]}, include: ['user']});
     }
     else{
-        comments = await db.Comment.findAll({where:{ user_id: user.id,}, include: ['user','post']});
+        comments = await db.Comment.findAll({where:{ user_id: user.id,}, include: ['profile','post']});
     }
 
     // if(typeof req.query.page != 'undefined'){
@@ -85,7 +104,7 @@ async function searchComments(req) {
         comments = await db.Comment.findAll({where:{ createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today },[Op.or]: [
             {title:{[Op.like]: '%' + req.query.search + '%'}}, 
             {content:{[Op.like]: '%' + req.query.search + '%'}}
-        ] }, include: ['user']});
+        ] }, include: ['profile']});
       }
       if(typeof req.query.page != 'undefined'){
 
