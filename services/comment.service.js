@@ -44,13 +44,13 @@ async function getAll(id) {
 
     return comments;
 }
-async function getAllCommentsFromPost(page_id,params) {
+async function getAllCommentsFromPost(req) {
     sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 7));
     today = new Date(new Date().setDate(new Date().getDate()));
     
-    comments = await db.Comment.findAll({where:{ post_id: params.post_id, createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['profile']});
+    comments = await db.Comment.findAll({where:{ post_id: req.query.post, createdAt:{ [Op.gt]:sevenDaysAgo, [Op.lt]:today }}, include: ['profile']});
     
-    const page = parseInt(page_id) || 1;
+    const page = parseInt(req.query.page) || 1;
 
     // get pager object for specified page
     const pager = paginate(comments.length, page);

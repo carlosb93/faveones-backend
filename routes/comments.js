@@ -5,6 +5,6 @@ const router = express.Router();
 
 // Rutas
 // ToDo cambiar a un fichero aparte
-router.get('/page/:id', Comment.getAllCommentsFromPost);
-
+router.get('/', Comment.getAllCommentsFromPost);
+ //http://localhost:4000/api/comments?post=cuba&page=1
 module.exports = router;

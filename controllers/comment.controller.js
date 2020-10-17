@@ -11,7 +11,7 @@ exports.getAll = async (req, res,next) =>  {
 }
 
 exports.getAllCommentsFromPost = async (req, res,next) =>  {
-    commentService.getAllCommentsFromPost(req.params.id,req.body)
+    commentService.getAllCommentsFromPost(req)
         .then(comments => res.json(comments))
         .catch(next);
 }
