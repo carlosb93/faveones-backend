@@ -43,6 +43,17 @@ async function initialize() {
     db.Comment.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
     db.Comment.belongsTo(db.Post,{foreignKey: 'post_id', as: 'post'});
     db.Comment.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
+
+    db.Chat = require('../models/chat.model')(sequelize);
+    db.Chat.belongsTo(db.User,{foreignKey: 'sender_id', as: 'usersend'});
+    db.Chat.belongsTo(db.User,{foreignKey: 'receiver_id', as: 'userreceive'});
+
+    db.Room = require('../models/rooms.model')(sequelize);
+
+    db.RoomUser = require('../models/rooms-users.model')(sequelize);
+    db.RoomUser.belongsTo(db.Room,{foreignKey: 'room_id', as: 'room'});
+    db.RoomUser.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
+
     // relations hasmany
     db.User.hasMany(db.Post,{foreignKey: 'user_id', as: 'posts'});
     db.User.hasMany(db.Comment,{foreignKey: 'user_id', as: 'comments'});
@@ -50,6 +61,22 @@ async function initialize() {
     db.User.hasMany(db.Profile,{foreignKey: 'user_id', as: 'profile'});
     db.Zodiac.hasMany(db.Profile,{foreignKey: 'zodiac_id', as: 'profile'});
     
+    const room =  await db.Room.findAll();
+    if(room[0] == undefined){
+    db.Room.sync().then(() => {
+        
+        db.Room.create({
+            name: 'Public',
+            description: 'Public Group',
+        });
+    });
+    console.log('Room table populated!!!');
+}else{
+    console.log('Room table already populated!!!');
+}
+    const zodiac =  await db.Zodiac.findAll();
+
+    if(zodiac[0] == undefined){
 
     db.Zodiac.sync().then(() => {
         
@@ -105,6 +132,10 @@ async function initialize() {
         
         
     });
+    console.log('Room table populated!!!');
+}else{
+    console.log('Zodiac table already populated!!!');
+}
     // Sincronizando los modelos con la BD
 
     await sequelize.sync();

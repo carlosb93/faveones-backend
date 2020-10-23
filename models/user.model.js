@@ -4,6 +4,7 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         email: { type: DataTypes.STRING, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },
         isVerified: { type: DataTypes.BOOLEAN, allowNull: true },
@@ -22,5 +23,5 @@ function model(sequelize) {
         }
     };
 
-    return sequelize.define('User', attributes, options);
+    return sequelize.define('users', attributes, options);
 }

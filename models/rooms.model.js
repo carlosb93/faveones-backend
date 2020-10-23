@@ -6,18 +6,13 @@ module.exports = model;
 function model(sequelize) {
     const attributes = {
         id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        content: { type: DataTypes.STRING, allowNull: false },
-        user_id: { type: DataTypes.INTEGER,
-                   allowNull: false,
+        name: { type: DataTypes.STRING, allowNull: false },
+        description: { type: DataTypes.STRING, allowNull: false },
+        image: { type: DataTypes.JSON, allowNull: true },
+        owner_id: { type: DataTypes.INTEGER,
+                   allowNull: true,
                    references:{
                        model:'users', //Post belongs to User
-                       key:'id',
-                   }
-                    },
-        post_id: { type: DataTypes.INTEGER,
-                   allowNull: false,
-                   references:{
-                       model:'posts', //Post belongs to User
                        key:'id',
                    }
                     },
@@ -36,5 +31,5 @@ function model(sequelize) {
         }
     };
 
-    return sequelize.define('comments', attributes, options);
+    return sequelize.define('rooms', attributes, options);
 }

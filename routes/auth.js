@@ -2,9 +2,11 @@ const express = require('express');
 const Auth = require('../controllers/users.controller');
 const router = express.Router();
 const {check} = require('express-validator');
+const authorize = require('_middleware/authorize')
 
 // Rutas
 router.post('/authenticate', Auth.authenticateSchema, Auth.authenticate);
+router.get('/logout', authorize(), Auth.logout);
 router.post('/register', Auth.registerSchema, Auth.register);
 router.get('/verify/:id', Auth.verifyUser);
    //password

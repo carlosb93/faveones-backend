@@ -58,7 +58,12 @@ async function update(req) {
     if (emailChanged && await db.Profile.findOne({ where: { email: params.email } })) {
         throw 'Email: "' + params.email + '" is already in use';
     }
-
+    await db.RoomUser.create(
+        {
+            room_id: 1,
+            user_id: user.id 
+        }
+    );
     // Actualizar parametros y guardar
     Object.assign(profile, params);
     await profile.save();

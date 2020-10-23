@@ -20,6 +20,12 @@ exports.authenticate = async (req, res,next) =>  {
         .catch(next);
 }
 
+exports.logout = async (req, res,next) =>  {
+    userService.logout(req,res)
+        .then(() => res.json({ message: 'Logout successfully!!' }))
+        .catch(next);
+}
+
 exports.registerSchema = async (req, res,next) =>  {
     const schema = Joi.object({
         firstName: Joi.string().required(),

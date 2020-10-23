@@ -5,6 +5,7 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         title: { type: DataTypes.STRING, allowNull: false },
         content: { type: DataTypes.STRING, allowNull: false },
         image: { type: DataTypes.JSON, allowNull: true },
@@ -30,5 +31,5 @@ function model(sequelize) {
         }
     };
 
-    return sequelize.define('Post', attributes, options);
+    return sequelize.define('posts', attributes, options);
 }

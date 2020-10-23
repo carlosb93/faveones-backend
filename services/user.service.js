@@ -14,6 +14,7 @@ var sendPasswordConfirmationEmail = require('../mailers/sendPasswordConfirmation
 
 module.exports = {
     authenticate,
+    logout,
     getAll,
     getById,
     create,
@@ -32,11 +33,23 @@ async function authenticate({ email, password }, res) {
         return res.status(200).json({message: 'Incorrect username or password'});
         // throw 'Incorrect username or password';
     }
-        
+    const profile = await db.Profile.findOne({ where: { user_id: user.id } });
+
+    profile.chat_status = 'online';
+
+    await profile.save();    
 
     // Autenticado correctamente
     const token = jwt.sign({ sub: user.id }, process.env.SECRET, { expiresIn: '7d' }); // tiempo de validez 7 dias
     return { ...omitHash(user.get()), token };
+}
+async function logout(req,res) {
+   
+    const profile = await db.Profile.findOne({ where: { user_id: req.user.id } });
+
+    profile.chat_status = 'offline';
+
+    await profile.save();    
 }
 
 async function getAll() {

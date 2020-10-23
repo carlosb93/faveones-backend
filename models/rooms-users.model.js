@@ -6,7 +6,7 @@ module.exports = model;
 function model(sequelize) {
     const attributes = {
         id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        content: { type: DataTypes.STRING, allowNull: false },
+        room_status: { type: DataTypes.STRING, allowNull: false },
         user_id: { type: DataTypes.INTEGER,
                    allowNull: false,
                    references:{
@@ -14,10 +14,10 @@ function model(sequelize) {
                        key:'id',
                    }
                     },
-        post_id: { type: DataTypes.INTEGER,
+        room_id: { type: DataTypes.INTEGER,
                    allowNull: false,
                    references:{
-                       model:'posts', //Post belongs to User
+                       model:'rooms', //Post belongs to User
                        key:'id',
                    }
                     },
@@ -36,5 +36,5 @@ function model(sequelize) {
         }
     };
 
-    return sequelize.define('comments', attributes, options);
+    return sequelize.define('rooms-users', attributes, options);
 }

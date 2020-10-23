@@ -8,6 +8,22 @@ const bodyParser = require('body-parser');
 const errorHandler = require('_middleware/error-handler');
 
 
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+
+/**
+ * SOCKET
+ */
+io.on('connection', async (socket) => {
+	require('./sockets/chat/joinedUser')(io, socket);
+	require('./sockets/chat/chatMessage')(io, socket);
+	require('./sockets/chat/disconnect')(io, socket);
+	require('./sockets/chat/privateMessage')(io, socket);
+	require('./sockets/chat/joinPrivateRoom')(io, socket);
+});
+
+
 app.use(fileUpload({
     createParentPath: true,
     limits: { 

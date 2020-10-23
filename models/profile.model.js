@@ -5,6 +5,7 @@ module.exports = model;
 
 function model(sequelize) {
     const attributes = {
+        id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         name: { type: DataTypes.STRING, allowNull: true },
         lastname: { type: DataTypes.STRING, allowNull: true },
         nick: { type: DataTypes.STRING, allowNull: true },
@@ -14,6 +15,7 @@ function model(sequelize) {
         description: { type: DataTypes.STRING, allowNull: true },
         gender: { type: DataTypes.STRING, allowNull: false },
         birthday: { type: DataTypes.STRING, allowNull: true },
+        chat_status: { type: DataTypes.STRING, allowNull: true },
         zodiac_id: { type: DataTypes.INTEGER,
             allowNull: false,
             references:{
@@ -43,5 +45,5 @@ function model(sequelize) {
         }
     };
 
-    return sequelize.define('Profile', attributes, options);
+    return sequelize.define('profiles', attributes, options);
 }
