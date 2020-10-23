@@ -152,7 +152,7 @@ async function update(id, params) {
             });
         });
     }
-    params.image = JSON.stringify(data);
+    
     // Validando
     const titleChanged = params.title && post.title !== params.title;
     if (titleChanged && await db.Post.findOne({ where: { title: params.title } })) {

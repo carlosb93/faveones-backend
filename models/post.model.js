@@ -8,7 +8,7 @@ function model(sequelize) {
         id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         title: { type: DataTypes.STRING, allowNull: false },
         content: { type: DataTypes.STRING, allowNull: false },
-        image: { type: DataTypes.JSON, allowNull: true },
+        image: { type: DataTypes.STRING, allowNull: true },
         user_id: { type: DataTypes.INTEGER,
                    allowNull: false,
                    references:{
