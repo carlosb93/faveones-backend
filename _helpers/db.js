@@ -28,58 +28,68 @@ async function initialize() {
     db.Zodiac = require('../models/zodiac.model')(sequelize);
     //model profile
     db.Profile = require('../models/profile.model')(sequelize);
-    // relations blongs
-    db.Profile.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
-    db.Profile.belongsTo(db.Zodiac,{foreignKey: 'zodiac_id', as: 'zodiac'});
+
     //model post
     db.Post = require('../models/post.model')(sequelize);
-    // relations blongs
-    db.Post.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
-    db.Post.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
-    
+
     //model comments
     db.Comment = require('../models/comment.model')(sequelize);
-    // relations blongs
-    db.Comment.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
-    db.Comment.belongsTo(db.Post,{foreignKey: 'post_id', as: 'post'});
-    db.Comment.belongsTo(db.Profile, {through: db.User, foreignKey: 'user_id', as: 'profile'});
-
     db.Chat = require('../models/chat.model')(sequelize);
-    db.Chat.belongsTo(db.User,{foreignKey: 'sender_id', as: 'usersend'});
-    db.Chat.belongsTo(db.User,{foreignKey: 'receiver_id', as: 'userreceive'});
 
     db.Room = require('../models/rooms.model')(sequelize);
 
     db.RoomUser = require('../models/rooms-users.model')(sequelize);
-    db.RoomUser.belongsTo(db.Room,{foreignKey: 'room_id', as: 'room'});
-    db.RoomUser.belongsTo(db.User,{foreignKey: 'user_id', as: 'user'});
+
+
+    await sequelize.sync() // charli pa cuando era esto? ahahaha
+
+    
+    // relations blongs
+    db.Profile.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
+    db.Profile.belongsTo(db.Zodiac, { foreignKey: 'zodiac_id', as: 'zodiac' });
+
+    // relations blongs
+    db.Post.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
+    db.Post.belongsTo(db.Profile, { through: db.User, foreignKey: 'user_id', as: 'profile' });
+
+    // relations blongs
+    db.Comment.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
+    db.Comment.belongsTo(db.Post, { foreignKey: 'post_id', as: 'post' });
+    db.Comment.belongsTo(db.Profile, { through: db.User, foreignKey: 'user_id', as: 'profile' });
+
+    db.Chat.belongsTo(db.User, { foreignKey: 'sender_id', as: 'usersend' });
+    db.Chat.belongsTo(db.User, { foreignKey: 'receiver_id', as: 'userreceive' });
+
+
+    db.RoomUser.belongsTo(db.Room, { foreignKey: 'room_id', as: 'room' });
+    db.RoomUser.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
 
     // relations hasmany
-    db.User.hasMany(db.Post,{foreignKey: 'user_id', as: 'posts'});
-    db.User.hasMany(db.Comment,{foreignKey: 'user_id', as: 'comments'});
-    db.Post.hasMany(db.Comment,{foreignKey: 'post_id', as: 'comments'});
-    db.User.hasMany(db.Profile,{foreignKey: 'user_id', as: 'profile'});
-    db.Zodiac.hasMany(db.Profile,{foreignKey: 'zodiac_id', as: 'profile'});
-    
-    const room =  await db.Room.findAll();
-    if(room[0] == undefined){
-    db.Room.sync().then(() => {
-        
-        db.Room.create({
-            name: 'Public',
-            description: 'Public Group',
+    db.User.hasMany(db.Post, { foreignKey: 'user_id', as: 'posts' });
+    db.User.hasMany(db.Comment, { foreignKey: 'user_id', as: 'comments' });
+    db.Post.hasMany(db.Comment, { foreignKey: 'post_id', as: 'comments' });
+    db.User.hasMany(db.Profile, { foreignKey: 'user_id', as: 'profile' });
+    db.Zodiac.hasMany(db.Profile, { foreignKey: 'zodiac_id', as: 'profile' });
+
+    const room = await db.Room.findAll();
+    if (room[0] == undefined) {
+        db.Room.sync().then(() => {
+
+            db.Room.create({
+                name: 'Public',
+                description: 'Public Group',
+            });
         });
-    });
-    console.log('Room table populated!!!');
-}else{
-    console.log('Room table already populated!!!');
-}
-    const zodiac =  await db.Zodiac.findAll();
+        console.log('Room table populated!!!');
+    } else {
+        console.log('Room table already populated!!!');
+    }
+    const zodiac = await db.Zodiac.findAll();
 
-    if(zodiac[0] == undefined){
+    if (zodiac[0] == undefined) {
 
-    db.Zodiac.sync().then(() => {
-        
+        db.Zodiac.sync().then(() => {
+
             db.Zodiac.create({
                 name: 'Aries',
                 description: '21 of March - 19 of April'
@@ -128,14 +138,14 @@ async function initialize() {
                 name: 'Piscis',
                 description: '19 of February - 20 of March'
             });
-         
-        
-        
-    });
-    console.log('Room table populated!!!');
-}else{
-    console.log('Zodiac table already populated!!!');
-}
+
+
+
+        });
+        console.log('Room table populated!!!');
+    } else {
+        console.log('Zodiac table already populated!!!');
+    }
     // Sincronizando los modelos con la BD
 
     await sequelize.sync();
