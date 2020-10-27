@@ -15,6 +15,7 @@ const io = require('socket.io')(server);
 /**
  * SOCKET
  */
+io.set('origins', '*:*');
 io.on('connection', async (socket) => {
 	require('./sockets/chat/joinedUser')(io, socket);
 	require('./sockets/chat/chatMessage')(io, socket);
