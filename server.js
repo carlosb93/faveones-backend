@@ -9,13 +9,13 @@ const errorHandler = require('_middleware/error-handler');
 
 
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { origins: '*:*'});
 
 
 /**
  * SOCKET
  */
-io.set('origins', '*:*');
+
 io.on('connection', async (socket) => {
 	require('./sockets/chat/joinedUser')(io, socket);
 	require('./sockets/chat/chatMessage')(io, socket);
