@@ -88,7 +88,7 @@ async function initialize() {
     }
     const zodiac = await db.Zodiac.findAll();
 
-    if (zodiac[0] == undefined) {
+    if (!zodiac[0]) {
 
         db.Zodiac.sync().then(() => {
 
