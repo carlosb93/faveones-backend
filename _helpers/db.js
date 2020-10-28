@@ -41,7 +41,7 @@ async function initialize() {
     db.RoomUser = require('../models/rooms-users.model')(sequelize);
 
 
-    await sequelize.sync() // charli pa cuando era esto? ahahaha
+    // await sequelize.sync() // charli pa cuando era esto? ahahaha
 
     
     // relations blongs
@@ -70,6 +70,8 @@ async function initialize() {
     db.Post.hasMany(db.Comment, { foreignKey: 'post_id', as: 'comments' });
     db.User.hasMany(db.Profile, { foreignKey: 'user_id', as: 'profile' });
     db.Zodiac.hasMany(db.Profile, { foreignKey: 'zodiac_id', as: 'profile' });
+
+    await sequelize.sync()
 
     const room = await db.Room.findAll();
     if (room[0] == undefined) {
@@ -148,5 +150,5 @@ async function initialize() {
     }
     // Sincronizando los modelos con la BD
 
-    await sequelize.sync();
+    // await sequelize.sync();
 }
