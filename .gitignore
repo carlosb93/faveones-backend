@@ -42,3 +42,4 @@ yarn.lock
 # volumes and stuff
 /containers/db/volume
 desktop.ini
+server1.js

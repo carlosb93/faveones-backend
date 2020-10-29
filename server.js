@@ -9,19 +9,6 @@ const errorHandler = require('_middleware/error-handler');
 
 
 const server = require('http').Server(app);
-// const io = require('socket.io')(server, {
-//     handlePreflightRequest: (req, res) => {
-//         const headers = {
-//             "Access-Control-Allow-Origin": "http://localhost:3000",
-//             'Access-Control-Allow-Credentials': true,
-//             // "Access-Control-Allow-Headers": "Content-Type, Authorization",
-//             // "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
-//             // "Access-Control-Allow-Credentials": true
-//         };
-//         res.writeHead(200, headers);
-//         res.end();
-//     }
-// });
 const io = require('socket.io')(server)
 
 app.use(fileUpload({
@@ -71,4 +58,4 @@ io.on('connection', (socket) => {
 
 // Iniciar servidor
 const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 3111;
-app.listen(port, () => console.log('Server listening on port: ' + port));
+server.listen(port, () => console.log('Server listening on port: ' + port));
