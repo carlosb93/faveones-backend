@@ -34,18 +34,21 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+// app.use(function (req, res, next) { // trying to get large images posted
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+
+//     next()
+// })
 
 // Manejador global de errores
 app.use(errorHandler);
 
-// Rutas del API 
-require('./routes/index')(app);
-
-
 /**
  * SOCKET
  */
-
 io.on('connection', (socket) => {
     // console.log('connection incoming!!!!!!!') // dev
 
@@ -55,8 +58,18 @@ io.on('connection', (socket) => {
     // require('./sockets/chat/privateMessage')(io, socket);
     // require('./sockets/chat/joinPrivateRoom')(io, socket);
 
-    
 });
+
+// set callbacks for feed
+require('./sockets/feedANDcomments/feed').init({
+    onPost: () => {
+        io.emit('new post', {})
+    }
+})
+
+// Rutas del API 
+require('./routes/index')(app);
+
 
 // Iniciar servidor
 const port = process.env.NODE_ENV === 'production' ? (process.env.PORT || 80) : 3111;

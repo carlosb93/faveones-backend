@@ -4,9 +4,6 @@ const { Op } = require('sequelize');
 const _ = require('lodash');
 const { param } = require('express-validator');
 
-
-
-
 module.exports = {
     newPost,
     getAll,
@@ -19,11 +16,13 @@ module.exports = {
 
 async function newPost(params, user, req, res) {
     // console.log(params) // dev checked
+    const onPost = require('../sockets/feedANDcomments/feed').getCalls().onPost
 
     params.user_id = user.id;
     params.image = JSON.stringify(params.image)
     try {
-        await db.Post.create(params);
+        await db.Post.create(params)
+        onPost() // inform the clients that new post was created(after created)
     } catch (e) { console.log(e, 'errrrrrroor!!!!!!') }
 }
 
