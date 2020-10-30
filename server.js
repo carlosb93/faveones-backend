@@ -47,13 +47,15 @@ require('./routes/index')(app);
  */
 
 io.on('connection', (socket) => {
+    // console.log('connection incoming!!!!!!!') // dev
 
-    console.log('connection incoming!!!!!!!')
     // require('./sockets/chat/joinedUser')(io, socket);
-    // require('./sockets/chat/chatMessage')(io, socket);
+    require('./sockets/chat/chatMessage')(io, socket);
     // require('./sockets/chat/disconnect')(io, socket);
     // require('./sockets/chat/privateMessage')(io, socket);
     // require('./sockets/chat/joinPrivateRoom')(io, socket);
+
+    
 });
 
 // Iniciar servidor
