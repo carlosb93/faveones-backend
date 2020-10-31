@@ -21,8 +21,9 @@ async function newPost(params, user, req, res) {
     params.user_id = user.id;
     params.image = JSON.stringify(params.image)
     try {
-        await db.Post.create(params)
-        onPost() // inform the clients that new post was created(after created)
+        const ret = await db.Post.create(params)
+        const newPost = await getPostWProfile(ret.dataValues.id)
+        onPost(newPost) // inform the clients that new post was created(after created)
     } catch (e) { console.log(e, 'errrrrrroor!!!!!!') }
 }
 
@@ -171,10 +172,14 @@ async function _delete(id) {
 
 // Funciones de ayuda
 
-async function getPost(id) {
-    const post = await db.Post.findByPk({ where: { id: { id } }, include: ['profile'] });
+async function getPostWProfile(id) {
+    const post = await db.Post.findOne({ where: { id: id }, include: ['profile'] });
     if (!post) throw 'Post not found';
     return post;
 }
 
-
+async function getPost(id) {
+    const post = await db.Post.findOne({ where: { id: id } });
+    if (!post) throw 'Post not found';
+    return post;
+}

@@ -62,8 +62,8 @@ io.on('connection', (socket) => {
 
 // set callbacks for feed
 require('./sockets/feedANDcomments/feed').init({
-    onPost: () => {
-        io.emit('new post', {})
+    onPost: post => {
+        io.emit('new post', post)
     }
 })
 
