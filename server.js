@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // CORS
-const whitelist = ['http://localhost:3000',]; // here the other origins
+const whitelist = ['http://localhost:3000', 'http://localhost:']; // here the other origins
 const corsOptions = {
     credentials: true, // This is important.
     origin: (origin, callback) => {
@@ -33,15 +33,8 @@ const corsOptions = {
     }
 }
 
-app.use(cors(corsOptions));
-// app.use(function (req, res, next) { // trying to get large images posted
-//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//     res.setHeader('Access-Control-Allow-Credentials', true);
-
-//     next()
-// })
+app.use(cors())
+// app.use(cors(corsOptions)); // use with options
 
 // Manejador global de errores
 app.use(errorHandler);
