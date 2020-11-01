@@ -64,6 +64,9 @@ io.on('connection', (socket) => {
 require('./sockets/feedANDcomments/feed').init({
     onPost: post => {
         io.emit('new post', post)
+    },
+    onComment: postId => {
+        io.emit('new comment', postId)
     }
 })
 
