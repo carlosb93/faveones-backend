@@ -24,8 +24,9 @@ async function newComment(params, user, req, res) {
     // params.post_id 
 
     // Guardando comments
-    await db.Comment.create(params);
-    onComment(params.post_id)
+    const resu = await db.Comment.create(params);
+    // onComment(params.post_id) // dono why not behaving like intended
+    setTimeout(() => onComment(params.post_id), 500) // revisar pq se ejecuta antes de guardadoen la bd
 }
 
 async function getAll(id) {
