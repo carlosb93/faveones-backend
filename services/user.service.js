@@ -29,27 +29,27 @@ module.exports = {
 async function authenticate({ email, password }, res) {
     const user = await db.User.scope('withHash').findOne({ where: { email } });
 
-    if (!user || !(await bcrypt.compare(password, user.password))){
-        return res.status(200).json({message: 'Incorrect username or password'});
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(200).json({ message: 'Incorrect username or password' });
         // throw 'Incorrect username or password';
     }
     const profile = await db.Profile.findOne({ where: { user_id: user.id } });
 
     profile.chat_status = 'online';
 
-    await profile.save();    
+    await profile.save();
 
     // Autenticado correctamente
     const token = jwt.sign({ sub: user.id }, process.env.SECRET, { expiresIn: '7d' }); // tiempo de validez 7 dias
     return { ...omitHash(user.get()), token };
 }
-async function logout(req,res) {
-   
+async function logout(req, res) {
+
     const profile = await db.Profile.findOne({ where: { user_id: req.user.id } });
 
     profile.chat_status = 'offline';
 
-    await profile.save();    
+    await profile.save();
 }
 
 async function getAll() {
@@ -60,16 +60,16 @@ async function getById(id) {
     return await getUser(id);
 }
 
-async function create(params,res) {
+async function create(params, res) {
     // Validacion
     if (await db.Profile.findOne({ where: { nick: params.username } })) {
         // throw 'User name: "' + params.username + '" is already in use';
-        return res.status(200).json({message: 'User name: "' + params.username + '" is already in use'});
+        return res.status(200).json({ message: 'User name: "' + params.username + '" is already in use' });
     }
 
     if (await db.User.findOne({ where: { email: params.email } })) {
         // throw 'Email: "' + params.email + '" is already in use';
-        return res.status(200).json({message: 'Email: "' + params.email + '" is already in use'});
+        return res.status(200).json({ message: 'Email: "' + params.email + '" is already in use' });
     }
 
     // Hash password
@@ -85,17 +85,9 @@ async function create(params,res) {
     // console.log('papapaparams', params)
 
     try {
-
-        sendVerificationEmail(params);
-
-
-        console.log('Sending verification email to: ' + params.email);
-        console.log(params.resetPasswordToken);
-
         // Guardando usuario
         await db.User.create(params);
-        const email = params.email;
-        const user = await db.User.findOne({ email });
+        const user = await db.User.findOne({ where: { email: params.email } });
 
         await db.Profile.create(
             {
@@ -106,12 +98,19 @@ async function create(params,res) {
                 birthday: '1993-05-08',
                 // avatar: '',
                 // address: '',
-                // description: '',
+                // description: '', 
                 gender: 'M',
-                zodiac_id: 1,
-                user_id: user.id 
+                zodiac_id: null,
+                user_id: user.id,
             }
         );
+
+        // mail stuff
+        sendVerificationEmail(params);
+
+
+        console.log('Sending verification email to: ' + params.email);
+        console.log(params.resetPasswordToken);
 
     } catch (error) {
         console.log(error)
@@ -120,8 +119,9 @@ async function create(params,res) {
 }
 
 async function verifyUser(id) {
+    console.log('here on verify service', id)
     const user = await getUserVerify(id);
-     params = user;
+    params = user;
     // Hash password si fue especificada
     if (!user.isVerified) {
         params.isVerified = true;
@@ -153,8 +153,8 @@ async function update(id, params, res) {
 async function resetPassword(token, params, res) {
     const user = await getUserVerify(token);
 
-    if (!user) return res.status(401).json({message: 'The password change token is invalid or has expired.'});
-    
+    if (!user) return res.status(401).json({ message: 'The password change token is invalid or has expired.' });
+
 
     if (params.password && params.password_confirmation) {
         user.password = await bcrypt.password(params.password, 10);
@@ -177,16 +177,16 @@ async function resetPassword(token, params, res) {
         console.log(error)
         console.log('Error sending email');
     }
-    
+
 }
 
 async function reset(token, res) {
     const user = await getUserVerify(token);
 
-    if (!user) return res.status(401).json({message: 'The password change token is invalid or has expired.'});
-    
-    return res.status(200).json({message: token});
-    
+    if (!user) return res.status(401).json({ message: 'The password change token is invalid or has expired.' });
+
+    return res.status(200).json({ message: token });
+
 }
 
 async function recover(params, res) {
@@ -195,12 +195,12 @@ async function recover(params, res) {
     const user = await db.User.findOne({ email });
 
 
-    if (!user) return res.status(401).json({ message: 'The email: ' + email + ' it is not associated with any account. Please check the email and try again.'});
+    if (!user) return res.status(401).json({ message: 'The email: ' + email + ' it is not associated with any account. Please check the email and try again.' });
 
     user.resetPasswordToken = crypto.randomBytes(20).toString('hex');
     user.resetPasswordExpires = Date.now() + 3600000;
     await user.save()
-    
+
 
     try {
 
@@ -214,7 +214,7 @@ async function recover(params, res) {
         console.log(error)
         console.log('Error sending email');
     }
-    
+
 }
 
 async function _delete(id) {
@@ -231,7 +231,8 @@ async function getUser(id) {
 }
 
 async function getUserVerify(id) {
-    const user = await db.User.findOne({ where: { resetPasswordToken: id, resetPasswordExpires: {$gt: Date.now()}} });
+    const user = await db.User.findOne({ where: { resetPasswordToken: id } });
+    // const user = await db.User.findOne({ where: { resetPasswordToken: id, resetPasswordExpires: {$gt: Date.now()}} });
     if (!user) throw 'User not found';
     return user;
 }

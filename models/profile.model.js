@@ -17,7 +17,7 @@ function model(sequelize) {
         birthday: { type: DataTypes.STRING, allowNull: true },
         chat_status: { type: DataTypes.STRING, allowNull: true },
         zodiac_id: { type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references:{
                 model:'zodiacs', //Post belongs to User
                 key:'id',
