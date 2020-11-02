@@ -81,6 +81,9 @@ async function create(params,res) {
     params.resetPasswordToken = crypto.randomBytes(20).toString('hex');
     params.resetPasswordExpires = Date.now() + 3600000;
 
+    // params.username = params.firstName
+    // console.log('papapaparams', params)
+
     try {
 
         sendVerificationEmail(params);
