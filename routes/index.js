@@ -5,8 +5,10 @@ const profile = require('./profile');
 const zodiac = require('./zodiac');
 const comment = require('./comment');
 const comments = require('./comments');
+const relationship = require('./relationship');
 const authorize = require('_middleware/authorize')
 const clientApiKeyValidation = require('_middleware/validationApiKey')
+
 
 module.exports = app => {
     app.get('/', clientApiKeyValidation(), (req, res) => {
@@ -20,5 +22,6 @@ module.exports = app => {
     app.use('/api/zodiac', clientApiKeyValidation(), zodiac);
     app.use('/api/comment', clientApiKeyValidation(), comment);
     app.use('/api/comments', clientApiKeyValidation(), comments);
+    app.use('/api/relationship', clientApiKeyValidation(), relationship);
 };
 

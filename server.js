@@ -62,6 +62,11 @@ require('./sockets/feedANDcomments/feed').init({
         io.emit('new comment', postId)
     }
 })
+require('./sockets/relationship/relation').init({
+    onRelationship: relation => {
+        io.emit('new relationship', relation)
+    }
+})
 
 // Rutas del API 
 require('./routes/index')(app);

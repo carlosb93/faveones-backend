@@ -39,10 +39,11 @@ async function initialize() {
     db.Room = require('../models/rooms.model')(sequelize);
 
     db.RoomUser = require('../models/rooms-users.model')(sequelize);
+    db.Status = require('../models/status.model')(sequelize);
+    db.Relationship = require('../models/relationship.model')(sequelize);
 
 
-    // await sequelize.sync() // charli pa cuando era esto? ahahaha
-
+    
     
     // relations blongs
     db.Profile.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
@@ -63,6 +64,14 @@ async function initialize() {
 
     db.RoomUser.belongsTo(db.Room, { foreignKey: 'room_id', as: 'room' });
     db.RoomUser.belongsTo(db.User, { foreignKey: 'user_id', as: 'user' });
+
+    // db.Relationship.belongsTo(db.User, { foreignKey: 'user_one_id', as: 'user_one' });
+    // db.Relationship.belongsTo(db.User, { foreignKey: 'user_two_id', as: 'user_two' });
+    // db.Relationship.belongsTo(db.User, { foreignKey: 'action_user_id', as: 'action_user' });
+    db.Relationship.belongsTo(db.Profile, { through: db.User, foreignKey: 'user_one_id', as: 'profile_one' });
+    db.Relationship.belongsTo(db.Profile, { through: db.User, foreignKey: 'user_two_id', as: 'profile_two' });
+    db.Relationship.belongsTo(db.Profile, { through: db.User, foreignKey: 'action_user_id', as: 'profile_action_user' });
+    db.Relationship.belongsTo(db.Status, { foreignKey: 'status', as: 'stados' });
 
     // relations hasmany
     db.User.hasMany(db.Post, { foreignKey: 'user_id', as: 'posts' });
@@ -144,9 +153,34 @@ async function initialize() {
 
 
         });
-        console.log('Room table populated!!!');
+        console.log('Zodiac table populated!!!');
     } else {
         console.log('Zodiac table already populated!!!');
+    }
+
+    const status = await db.Status.findAll();
+
+    if (!status[0]) {
+
+        db.Status.sync().then(() => {
+
+            db.Status.create({
+                name: 'Pending'
+            });
+            db.Status.create({
+                name: 'Accepted'
+            });
+            db.Status.create({
+                name: 'Declined'
+            });
+            db.Status.create({
+                name: 'Blocked'
+            });
+
+        });
+        console.log('Status table populated!!!');
+    } else {
+        console.log('Status table already populated!!!');
     }
     // Sincronizando los modelos con la BD
 

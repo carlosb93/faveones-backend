@@ -1,10 +1,13 @@
 const express = require('express');
-const Comment = require('../controllers/comment.controller');
-// const authorize = require('_middleware/authorize')
 const router = express.Router();
+const commentService = require('../services/comment.service');
 
 // Rutas
 // ToDo cambiar a un fichero aparte
-router.get('/', Comment.getAllCommentsFromPost);
+router.get('/', async (req, res,next) =>  {
+    commentService.getAllCommentsFromPost(req)
+        .then(comments => res.json(comments))
+        .catch(next);
+});
  //http://localhost:4000/api/comments?post=cuba&page=1
 module.exports = router;

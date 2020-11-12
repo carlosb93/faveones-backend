@@ -1,9 +1,13 @@
 const express = require('express');
-const Zodiac = require('../controllers/zodiac.controller');
 const router = express.Router();
+const zodiacService = require('../services/zodiac.service');
 
 // Rutas
 // ToDo cambiar a un fichero aparte
-router.get('/', Zodiac.get);
+router.get('/', async (req, res,next) =>  {
+    zodiacService.get()
+        .then(zodiac => res.json(zodiac))
+        .catch(next);
+});
 
 module.exports = router;
